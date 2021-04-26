@@ -5,59 +5,55 @@ import "./style.css";
 import "./assets/img/rigo-baby.jpg";
 import "./assets/img/4geeks.ico";
 
-window.onload = function() {
-  //write your code here
-  let arrDeck = [];
+let arrDeck = [];
+let log = [];
 
-  document.querySelector("#draw").addEventListener("click", () => {
-    arrDeck = [];
-    log = [];
-    document.querySelector(".deck.unsorted").innerHTML = "";
-    let deckSize = document.querySelector("#amount").value;
-    let deck = document.querySelector(".deck.unsorted");
-    for (let i = 0; i < deckSize; i++) {
-      let randomCard = getRandomCard();
-      arrDeck.push(randomCard);
+document.querySelector("#draw").addEventListener("click", () => {
+  arrDeck = [];
+  log = [];
+  document.querySelector(".deck.unsorted").innerHTML = "";
+  let deckSize = document.querySelector("#amount").value;
+  let deck = document.querySelector(".deck.unsorted");
+  for (let i = 0; i < deckSize; i++) {
+    let randomCard = getRandomCard();
+    arrDeck.push(randomCard);
 
+    let cardElement = document.createElement("div");
+    cardElement.className = "card " + randomCard.suit;
+    cardElement.innerHTML = `<span>${randomCard.number}</span>`;
+    deck.appendChild(cardElement);
+  }
+
+  document.querySelector(".solution-log").innerHTML = "";
+});
+
+document.querySelector("#sort").addEventListener("click", () => {
+  let arrLog = bubbleSort(arrDeck);
+  let solutionLog = document.querySelector(".solution-log");
+
+  for (let i = 0; i < log.length; i++) {
+    let solutionRowElement = document.createElement("li");
+    solutionRowElement.innerHTML = `<i>${i}</i>`;
+    let solutionDeckElement = document.createElement("div");
+    solutionDeckElement.className = "deck";
+
+    for (let j = 0; j < log[i].length; j++) {
       let cardElement = document.createElement("div");
-      cardElement.className = "card " + randomCard.suit;
-      cardElement.innerHTML = `<span>${randomCard.number}</span>`;
-      deck.appendChild(cardElement);
+      cardElement.className = "card " + log[i][j].suit;
+      cardElement.innerHTML = `<span>${log[i][j].number}</span>`;
+      solutionDeckElement.appendChild(cardElement);
     }
 
-    document.querySelector(".solution-log").innerHTML = "";
-  });
+    solutionRowElement.appendChild(solutionDeckElement);
 
-  document.querySelector("#sort").addEventListener("click", () => {
-    let arrLog = bubbleSort(arrDeck);
-    let solutionLog = document.querySelector(".solution-log");
-
-    for (let i = 0; i < log.length; i++) {
-      let solutionRowElement = document.createElement("li");
-      solutionRowElement.innerHTML = `<i>${i}</i>`;
-      let solutionDeckElement = document.createElement("div");
-      solutionDeckElement.className = "deck";
-
-      for (let j = 0; j < log[i].length; j++) {
-        let cardElement = document.createElement("div");
-        cardElement.className = "card " + log[i][j].suit;
-        cardElement.innerHTML = `<span>${log[i][j].number}</span>`;
-        solutionDeckElement.appendChild(cardElement);
-      }
-
-      solutionRowElement.appendChild(solutionDeckElement);
-
-      solutionLog.appendChild(solutionRowElement);
-    }
-  });
-};
+    solutionLog.appendChild(solutionRowElement);
+  }
+});
 
 const getRandomCard = () => ({
   number: generateRandomCardNumber(),
   suit: generateRandomCardSuit()
 });
-
-let log = [];
 
 const bubbleSort = arr => {
   let wall = arr.length - 1;
